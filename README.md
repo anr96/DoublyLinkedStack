@@ -1,10 +1,8 @@
 #HW5 Doubly Linked Stack 
 
-#First-Name Last-Name
+#Amanda Robinson
 
-TODO - Update your name in this readme.
-
-TODO - Add a badge from travis CI here
+[![Build Status](https://travis-ci.com/csc340-03-spring-2016/csc340-03-hw5-anr96.svg?token=sqKHHUsKkyZTggTth4Mt&branch=master)](https://travis-ci.com/csc340-03-spring-2016/csc340-03-hw5-anr96)
 
 ##Problem statement:
 Implement the Back-end of an ADT that represents a stack. The class contains two pointers that maintain key locations in 
