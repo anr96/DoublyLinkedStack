@@ -43,47 +43,96 @@ DLinkedStack<ItemType>::DLinkedStack() : headPtr(nullptr), topPtr(nullptr) {
 
 template<class ItemType>
 DLinkedStack<ItemType>::DLinkedStack(const DLinkedStack<ItemType> &aStack) {
-    //TODO - Implement the copy constructor
+    //Implement the copy constructor
+    Node<ItemType> *origSPtr = aStack.headPtr;
+    if (origSPtr == nullptr) {
+        topPtr = headPtr = nullptr;
+    }
+    else {
+        // should work if basicStack2 = basicStack in Gtest
+        headPtr = new Node<ItemType>();
+        headPtr->setItem(origSPtr->getItem());
 
+        //similar to SDLL, just ensure to renew vals of topPtr & .getPrev
+        Node<ItemType> *newSPtr = headPtr;
+        origSPtr = origSPtr->getNext();
+
+        while (origSPtr != nullptr){    // when traversing, keep a pointer to count
+            ItemType nextItem = origSPtr->getItem(); //next value from aStack/origSPtr
+            Node<ItemType> *newNodePtr = new Node<ItemType>(nextItem); //new node from the next value
+            newSPtr->setNext(newNodePtr);
+            newNodePtr->setPrev(headPtr);
+            topPtr = newNodePtr;
+            origSPtr = origSPtr->getNext();
+        }
+
+        newSPtr->setNext(nullptr);
+    }
 }
-
 template<class ItemType>
 DLinkedStack<ItemType>::~DLinkedStack() {
-    //TODO - Implement the destructor
+    // Implement the destructor : call pop() until stack is empty
+    while (!isEmpty()&& topPtr->getNext()!= nullptr)
+        pop();
 }
 
 template<class ItemType>
 Node<ItemType> *DLinkedStack<ItemType>::getPointerTo(const ItemType &target) const {
-    //TODO - Return the Node pointer that contains the target(return nullptr if not found)
+    //Return the Node pointer that contains the target(return nullptr if not found)
+    bool isFound = false;
+    Node<ItemType> *current = headPtr;
 
-    return nullptr;
+    while ((current != nullptr) && !isFound) {
+        if (target == current->getItem()){
+            isFound = true;
+        }
+        else{
+            current = current->getNext();
+        }
+    }
+    return current;
 }
 
 template<class ItemType>
 bool DLinkedStack<ItemType>::isEmpty() const {
-    //TODO - Return True if the list is empty
-
-    return true;
+    //return true if the list is empty
+    return topPtr == nullptr;
 }
 
 template<class ItemType>
 bool DLinkedStack<ItemType>::push(const ItemType &newItem) {
-    //TODO - Push an item on the Doubly Linked Stack
+    // Push an item on the Doubly Linked Stack
+    if(topPtr == nullptr){
+        topPtr = new Node<ItemType>(newItem);
+        headPtr = topPtr;
+    }
+    else {
+        Node<ItemType> *addedNode = new Node<ItemType>(newItem);
+        addedNode->setPrev(topPtr);
+        topPtr->setNext(addedNode);
+        topPtr = addedNode;
+    }
 
-    return false;
+    return true;
+
 }
 
 template<class ItemType>
 bool DLinkedStack<ItemType>::pop() {
-    //TODO - Pop an item from the stack - Return true if successful
-
+    //Pop an item from the stack - Return true if successful
+    if(headPtr != nullptr){
+        topPtr = topPtr->getPrev();
+        topPtr->setNext(nullptr);
+        return true;
+    }
     return false;
 }
 
 template<class ItemType>
 ItemType DLinkedStack<ItemType>::peek() const {//Assume this never fails.
-    //TODO - return the element stored at the top of the stack (topPtr)
-    return 0;//garbage
+    //return the element stored at the top of the stack (topPtr)
+    if(!isEmpty())
+        return topPtr->getItem();
 }
 
 template<class ItemType>
